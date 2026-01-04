@@ -12,4 +12,17 @@ jobs:
         run: |
           sudo apt install openjdk-25-jdk-headless
           javac -d build $(find src -name "*.java")
-          ls -la build
+          ls -la
+  packege:
+    name: Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: create docker image
+        run: |
+          echo "FROM openjdk:25-ea-21-jdk-slim" >> Dockerfile
+          echo "WORKDIR /usr/src/app" >> Dockerfile
+          echo "ARG JAR_FILE=target/*.jar" >> Dockerfile
+          echo "COPY ${JAR_FILE} app.jar ." >> Dockerfile
+          echo "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]" >> Dockerfile
+          docker build -t tickets:V1 .
+          
