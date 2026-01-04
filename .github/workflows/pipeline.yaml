@@ -32,8 +32,7 @@ jobs:
         run: |
           echo "FROM openjdk:25-ea-21-jdk-slim" >> Dockerfile
           echo "WORKDIR /usr/src/app" >> Dockerfile
-          echo "ARG JAR_FILE=target/*.jar" >> Dockerfile
-          echo "COPY ${JAR_FILE} app.jar ." >> Dockerfile
-          echo "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]" >> Dockerfile
+          echo "COPY . ." >> Dockerfile
+          echo "ENTRYPOINT [\"java\", \"main/Main.class\"]" >> Dockerfile
           docker build -t tickets:V1 .
 
