@@ -9,6 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Create JAR file
-        run: ls -la
-
-    
+        run: |
+          sudo apt install openjdk-25-jdk-headless
+          javac -d build $(find src -name "*.java")
+          ls -la build
