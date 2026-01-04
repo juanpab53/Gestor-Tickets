@@ -13,10 +13,21 @@ jobs:
           sudo apt install openjdk-25-jdk-headless
           javac -d build $(find src -name "*.java")
           ls -la
+      - name: crear artefacto
+        uses: actions/upload-artifact@v4
+        with: 
+            name: classfiles
+            path: build/*
+
   packege:
     name: Package
+    needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Descarga el classfiles
+        uses: actions/download-artifact@v5
+        with:
+            name: classfiles
       - name: create docker image
         run: |
           echo "FROM openjdk:25-ea-21-jdk-slim" >> Dockerfile
@@ -25,4 +36,4 @@ jobs:
           echo "COPY ${JAR_FILE} app.jar ." >> Dockerfile
           echo "ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]" >> Dockerfile
           docker build -t tickets:V1 .
-          
+
