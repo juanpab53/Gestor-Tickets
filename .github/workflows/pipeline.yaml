@@ -45,4 +45,5 @@ jobs:
           echo "WORKDIR /usr/src/app" >> Dockerfile
           echo "COPY . ." >> Dockerfile
           echo "ENTRYPOINT [\"java\", \"main/Main.class\"]" >> Dockerfile
+          echo "${{steps.metadata.outputs.image}}"
           docker build -t ${{steps.metadata.outputs.image}} --push .  
