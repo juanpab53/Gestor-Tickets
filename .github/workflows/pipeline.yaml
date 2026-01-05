@@ -28,11 +28,21 @@ jobs:
         uses: actions/download-artifact@v5
         with:
             name: classfiles
+      - name: login registro docker
+        uses: docker/login-action@v3
+        with:
+            registry: ghcr.io
+            usaername: ${{github.actor}}
+            password: ${{secrets.GITHUB_TOKEN}}
+      - name: metadata
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+            images: ghcr.io/${{github.repository}}
       - name: create docker image
         run: |
           echo "FROM openjdk:25-ea-21-jdk-slim" >> Dockerfile
           echo "WORKDIR /usr/src/app" >> Dockerfile
           echo "COPY . ." >> Dockerfile
           echo "ENTRYPOINT [\"java\", \"main/Main.class\"]" >> Dockerfile
-          docker build -t tickets:V1 .
-
+          docker build -t ${{steps.metadata.outputs.image}} --push .  
